@@ -213,7 +213,23 @@ def admin_orders():
     orders = conn.execute("SELECT * FROM orders ORDER BY id DESC").fetchall()
     conn.close()
     return render_template("admin_orders.html", orders=orders, flags=get_all_flags(), cart_count=0)
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        if username:
+            session["user"] = username
+            flash(f"Welcome, {username}!", "success")
+            return redirect(url_for("index"))
+        flash("Please enter a username.", "danger")
+    return render_template("login.html", flags=get_all_flags(), cart_count=0)
 
+@app.route("/logout")
+def logout():
+    username = session.get("user", "User")
+    session.pop("user", None)
+    flash(f"Goodbye, {username}! You have been logged out.", "info")
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     init_db()
