@@ -32,7 +32,7 @@ discount-percentage:
     twenty: "20"
     thirty: "30"
   defaultRule:
-    variation: twenty         # Change to "twenty" or "thirty" to adjust
+    variation: thirty        # Change to "twenty" or "thirty" to adjust
 
 # ── 3. Cash on Delivery ───────────────────────────────────────────────────────
 # Enables / disables COD as a checkout payment option.
