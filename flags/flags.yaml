@@ -61,7 +61,7 @@ promo-banner-text:
     festive: "🎊 Festive Offers: Free Shipping on orders above ₹999!"
     default: "Welcome to ShopSmart — India's favourite online store!"
   defaultRule:
-    variation: default      # Change to "sale" or "festive" for campaigns
+    variation: sale     # Change to "sale" or "festive" for campaigns
 
 # ── 6. New Checkout Layout ────────────────────────────────────────────────────
 # Toggles the checkout page UI between:
