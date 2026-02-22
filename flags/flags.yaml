@@ -1,138 +1,43 @@
-# =============================================================================
-# flags.yaml — Feature Flag Configuration
-# =============================================================================
-# This file is tracked by Git (SCM).
-# Every change here is a Git commit, providing:
-#   - Version Control         : full history of every flag state
-#   - Configuration Identification : each commit has a unique SHA
-#   - Configuration Status Accounting : current state is always visible
-#   - Audit Trail             : who changed what and when (git log)
-#   - Controlled Rollout      : change a flag, commit, proxy reloads automatically
-#
-# File format: GO Feature Flag (https://gofeatureflag.org/)
-# Relay Proxy polls this file and serves it via the OFREP REST API.
-# =============================================================================
-
-# ── 1. Discount Banner ────────────────────────────────────────────────────────
-# Shows "FLAT X% OFF" banner on the homepage and product cards.
-# Set to true to start a flash sale; false to end it.
 discount-banner-enabled:
   variations:
     enabled: true
     disabled: false
   defaultRule:
-    variation: enabled   # Change to "enabled" to activate discount banner
+    variation: disabled
 
-# ── 2. Discount Percentage ────────────────────────────────────────────────────
-# Controls the numeric % shown in the discount banner.
-# Can be changed independently of the banner toggle.
 discount-percentage:
   variations:
     ten: "10"
     twenty: "20"
     thirty: "30"
   defaultRule:
-    variation: thirty        # Change to "twenty" or "thirty" to adjust
+    variation: ten
 
-# ── 3. Cash on Delivery ───────────────────────────────────────────────────────
-# Enables / disables COD as a checkout payment option.
-# Set to false to force digital payments only.
 cash-on-delivery-enabled:
   variations:
     enabled: true
     disabled: false
   defaultRule:
-    variation: enabled   # Change to "enabled" to allow COD
+    variation: disabled
 
-# ── 4. Promotional Banner ─────────────────────────────────────────────────────
-# Shows a coloured strip banner at the top of every page.
 promo-banner-enabled:
   variations:
     enabled: true
     disabled: false
   defaultRule:
-    variation: enabled    # Change to "enabled" to show the promo strip
+    variation: disabled
 
-# ── 5. Promotional Banner Text ────────────────────────────────────────────────
-# The message shown inside the promotional banner.
 promo-banner-text:
   variations:
     sale:    "🔥 Grand Sale! Up to 50% off on all products. Shop Now!"
-    festive: "🎊 Festive Offers: Free Shipping on orders above ₹999!"
+    festive: "🎊 Festive Offers: Free Shipping on orders above Rs.999!"
     default: "Welcome to ShopSmart — India's favourite online store!"
   defaultRule:
-    variation: sale      # Change to "sale" or "festive" for campaigns
+    variation: default
 
-# ── 6. New Checkout Layout ────────────────────────────────────────────────────
-# Toggles the checkout page UI between:
-#   false → classic single-column form
-#   true  → modern two-column layout (shipping left, summary right)
-# Use this to A/B test checkout UX.
 new-checkout-layout:
   variations:
     new:     true
     classic: false
   defaultRule:
-    variation: new    # Change to "new" to activate two-column layout
-
-# ── 7. Free Shipping Banner ───────────────────────────────────────────────────
-free-shipping-enabled:
-  variations:
-    enabled: true
-    disabled: false
-  defaultRule:
-    variation: enabled   # change to enabled to show free shipping badge
-
-# ── 8. Stock Alert ────────────────────────────────────────────────────────────
-# Shows "Only 2 left!" warning on product cards
-stock-alert-enabled:
-  variations:
-    enabled: true
-    disabled: false
-  defaultRule:
-    variation: enabled
-
-# ── 9. Dark Mode ──────────────────────────────────────────────────────────────
-dark-mode-enabled:
-  variations:
-    enabled: true
-    disabled: false
-  defaultRule:
-    variation: enabled
-
-# ── 10. Buy Now Button ────────────────────────────────────────────────────────
-# Shows a "Buy Now" button alongside "Add to Cart" on product cards
-buy-now-enabled:
-  variations:
-    enabled: true
-    disabled: false
-  defaultRule:
-    variation: enabled
-
-# ── 11. Rating Display ────────────────────────────────────────────────────────
-# Shows star ratings on product cards
-ratings-enabled:
-  variations:
-    enabled: true
-    disabled: false
-  defaultRule:
-    variation: enabled
-
-# ── 12. Coupon Code Box ───────────────────────────────────────────────────────
-# Shows a coupon input field on the cart page
-coupon-box-enabled:
-  variations:
-    enabled: true
-    disabled: false
-  defaultRule:
-    variation: enabled
-
-# ── 13. Coupon Code Box ───────────────────────────────────────────────────────
-# Shows the coupon input box on the cart page.
-# When disabled, coupon entry is hidden from customers.
-coupon-box-enabled:
-  variations:
-    enabled: true
-    disabled: false
-  defaultRule:
-    variation: disabled   # change to enabled to show coupon box    
+    variation: classic
