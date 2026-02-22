@@ -15,7 +15,7 @@ discount-banner-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # change to enabled to show discount banner
+    variation: enabled   # change to enabled to show discount banner
 
 # ── 2. Discount Percentage ────────────────────────────────────────────────────
 discount-percentage:
@@ -24,7 +24,7 @@ discount-percentage:
     twenty: "20"
     thirty: "30"
   defaultRule:
-    variation: ten        # change to twenty or thirty to adjust
+    variation: twenty       # change to twenty or thirty to adjust
 
 # ── 3. Cash on Delivery ───────────────────────────────────────────────────────
 cash-on-delivery-enabled:
@@ -32,7 +32,7 @@ cash-on-delivery-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # change to enabled to allow COD
+    variation: enabled   # change to enabled to allow COD
 
 # ── 4. Promotional Banner ─────────────────────────────────────────────────────
 promo-banner-enabled:
@@ -40,7 +40,7 @@ promo-banner-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # change to enabled to show promo strip
+    variation: enabled  # change to enabled to show promo strip
 
 # ── 5. Promotional Banner Text ────────────────────────────────────────────────
 promo-banner-text:
@@ -49,7 +49,7 @@ promo-banner-text:
     festive: "🎊 Festive Offers: Free Shipping on orders above Rs.999!"
     default: "Welcome to ShopSmart — India's favourite online store!"
   defaultRule:
-    variation: default    # change to sale or festive for campaigns
+    variation: enabled    # change to sale or festive for campaigns
 
 # ── 6. New Checkout Layout ────────────────────────────────────────────────────
 new-checkout-layout:
@@ -57,7 +57,7 @@ new-checkout-layout:
     new:     true
     classic: false
   defaultRule:
-    variation: classic    # change to new to activate two-column layout
+    variation: new    # change to new to activate two-column layout
 
 # ── 7. Free Shipping ──────────────────────────────────────────────────────────
 free-shipping-enabled:
@@ -65,7 +65,7 @@ free-shipping-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # change to enabled to show free shipping badge
+    variation: enabled   # change to enabled to show free shipping badge
 
 # ── 8. Stock Alert ────────────────────────────────────────────────────────────
 stock-alert-enabled:
@@ -73,7 +73,7 @@ stock-alert-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # change to enabled to show low stock warning
+    variation: enabled  # change to enabled to show low stock warning
 
 # ── 9. Dark Mode ──────────────────────────────────────────────────────────────
 dark-mode-enabled:
@@ -81,7 +81,7 @@ dark-mode-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # change to enabled to switch site to dark theme
+    variation: enabled   # change to enabled to switch site to dark theme
 
 # ── 10. Buy Now Button ────────────────────────────────────────────────────────
 buy-now-enabled:
@@ -89,7 +89,7 @@ buy-now-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # change to enabled to show Buy Now button on cards
+    variation: enabled   # change to enabled to show Buy Now button on cards
 
 # ── 11. Star Ratings ──────────────────────────────────────────────────────────
 ratings-enabled:
@@ -97,7 +97,7 @@ ratings-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # change to enabled to show star ratings on cards
+    variation: enabled   # change to enabled to show star ratings on cards
 
 # ── 12. Coupon Code Box ───────────────────────────────────────────────────────
 coupon-box-enabled:
@@ -105,7 +105,7 @@ coupon-box-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # change to enabled to show coupon input on cart page
+    variation: enabled   # change to enabled to show coupon input on cart page
 
 # ── 13. Flash Sale Mode ───────────────────────────────────────────────────────
 flash-sale-enabled:
@@ -113,4 +113,4 @@ flash-sale-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # change to enabled to activate full flash sale mode
+    variation:  enabled  # change to enabled to activate full flash sale mode
