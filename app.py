@@ -96,12 +96,20 @@ def evaluate_flag(flag_key, default_value, user_id="anonymous"):
 
 def get_all_flags(user_id="anonymous"):
     return {
-        "discount-banner-enabled":  evaluate_flag("discount-banner-enabled",  False,               user_id),
-        "cash-on-delivery-enabled": evaluate_flag("cash-on-delivery-enabled", False,               user_id),
-        "promo-banner-enabled":     evaluate_flag("promo-banner-enabled",     False,               user_id),
-        "new-checkout-layout":      evaluate_flag("new-checkout-layout",      False,               user_id),
-        "discount-percentage":      evaluate_flag("discount-percentage",      "10",                user_id),
+        # Original flags
+        "discount-banner-enabled":  evaluate_flag("discount-banner-enabled",  False,                  user_id),
+        "cash-on-delivery-enabled": evaluate_flag("cash-on-delivery-enabled", False,                  user_id),
+        "promo-banner-enabled":     evaluate_flag("promo-banner-enabled",     False,                  user_id),
+        "new-checkout-layout":      evaluate_flag("new-checkout-layout",      False,                  user_id),
+        "discount-percentage":      evaluate_flag("discount-percentage",      "10",                   user_id),
         "promo-banner-text":        evaluate_flag("promo-banner-text",        "Grand Sale! Shop Now!", user_id),
+        # New flags
+        "free-shipping-enabled":    evaluate_flag("free-shipping-enabled",    False,                  user_id),
+        "stock-alert-enabled":      evaluate_flag("stock-alert-enabled",      False,                  user_id),
+        "dark-mode-enabled":        evaluate_flag("dark-mode-enabled",        False,                  user_id),
+        "buy-now-enabled":          evaluate_flag("buy-now-enabled",          False,                  user_id),
+        "ratings-enabled":          evaluate_flag("ratings-enabled",          False,                  user_id),
+        "coupon-box-enabled":       evaluate_flag("coupon-box-enabled",       False,                  user_id),
     }
 
 

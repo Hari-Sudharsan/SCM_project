@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 {% block title %}Home{% endblock %}
+
 {% block content %}
+
 <div class="d-flex justify-content-between align-items-center mb-4">
   <div>
     <h2 class="fw-bold mb-0">Featured Products</h2>
@@ -15,27 +17,65 @@
   {% for p in products %}
   <div class="col">
     <div class="card product-card h-100">
+
       <div class="product-img">
         {% if p['category'] == 'Electronics' %}🎧
         {% elif p['category'] == 'Footwear' %}👟
         {% elif p['category'] == 'Clothing' %}👕
         {% else %}🎒{% endif %}
       </div>
+
       <div class="card-body d-flex flex-column">
+
         <span class="badge bg-secondary mb-2" style="width:fit-content">{{ p['category'] }}</span>
+
+        {% if flags.get('ratings-enabled') %}
+        <div class="text-warning small mb-1">
+          ★★★★☆ <span class="text-muted">(128 reviews)</span>
+        </div>
+        {% endif %}
+
         <h5 class="card-title">{{ p['name'] }}</h5>
+
         <div class="mb-2">
           <span class="fw-bold fs-5 text-success">Rs.{{ "%.2f"|format(p['price']) }}</span>
-          {% if flags['discount-banner-enabled'] %}
+          {% if flags.get('discount-banner-enabled') %}
           <span class="text-muted text-decoration-line-through ms-2 small">
             Rs.{{ "%.2f"|format(p['price'] * 1.2) }}
           </span>
           <span class="badge bg-danger ms-1">{{ flags['discount-percentage'] }}% OFF</span>
           {% endif %}
         </div>
+
+        {% if flags.get('free-shipping-enabled') %}
+        <div class="text-success small mb-2">
+          <i class="bi bi-truck"></i> Free Shipping
+        </div>
+        {% endif %}
+
+        {% if flags.get('stock-alert-enabled') %}
+        <div class="text-danger small mb-2">
+          <i class="bi bi-exclamation-circle"></i> Only 2 left in stock!
+        </div>
+        {% endif %}
+
+        {% if flags.get('coupon-box-enabled') %}
+        <div class="mb-2 p-2 rounded bg-light border text-center small">
+          <i class="bi bi-ticket-perforated text-primary"></i>
+          Use coupon <strong>SAVE10</strong> at checkout
+        </div>
+        {% endif %}
+
         <a href="{{ url_for('add_to_cart', product_id=p['id']) }}" class="btn btn-primary mt-auto">
           <i class="bi bi-cart-plus"></i> Add to Cart
         </a>
+
+        {% if flags.get('buy-now-enabled') %}
+        <a href="{{ url_for('checkout') }}" class="btn btn-warning mt-2 w-100">
+          <i class="bi bi-lightning-fill"></i> Buy Now
+        </a>
+        {% endif %}
+
       </div>
     </div>
   </div>
@@ -45,7 +85,7 @@
 <div class="card mt-5 border-0 bg-white shadow-sm">
   <div class="card-body">
     <h5 class="card-title"><i class="bi bi-info-circle text-primary"></i> Live Feature Flag Status</h5>
-    <p class="text-muted small mb-3">Read in real-time from GO Feature Flag Relay Proxy (flags/flags.yaml tracked by Git).</p>
+    <p class="text-muted small mb-3">Read in real-time from GO Feature Flag Relay Proxy (<code>flags/flags.yaml</code> tracked by Git).</p>
     <div class="d-flex flex-wrap gap-2">
       {% for key, val in flags.items() %}
       <span class="badge rounded-pill px-3 py-2
@@ -58,30 +98,5 @@
     </div>
   </div>
 </div>
+
 {% endblock %}
-
-{# Free Shipping badge — flag: free-shipping-enabled #}
-{% if flags['free-shipping-enabled'] %}
-<div class="text-success small mt-1">
-  <i class="bi bi-truck"></i> Free Shipping
-</div>
-{% endif %}
-
-{# Stock Alert — flag: stock-alert-enabled #}
-{% if flags['stock-alert-enabled'] %}
-<div class="text-danger small mt-1">
-  <i class="bi bi-exclamation-circle"></i> Only 2 left!
-</div>
-{% endif %}
-
-{# Buy Now — flag: buy-now-enabled #}
-{% if flags['buy-now-enabled'] %}
-<a href="{{ url_for('checkout') }}" class="btn btn-warning mt-1 w-100">
-  <i class="bi bi-lightning-fill"></i> Buy Now
-</a>
-{% endif %}
-
-{# Star Ratings — flag: ratings-enabled #}
-{% if flags['ratings-enabled'] %}
-<div class="text-warning small mt-1">★★★★☆ <span class="text-muted">(128)</span></div>
-{% endif %}
