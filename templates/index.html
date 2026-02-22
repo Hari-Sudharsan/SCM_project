@@ -59,3 +59,29 @@
   </div>
 </div>
 {% endblock %}
+
+{# Free Shipping badge — flag: free-shipping-enabled #}
+{% if flags['free-shipping-enabled'] %}
+<div class="text-success small mt-1">
+  <i class="bi bi-truck"></i> Free Shipping
+</div>
+{% endif %}
+
+{# Stock Alert — flag: stock-alert-enabled #}
+{% if flags['stock-alert-enabled'] %}
+<div class="text-danger small mt-1">
+  <i class="bi bi-exclamation-circle"></i> Only 2 left!
+</div>
+{% endif %}
+
+{# Buy Now — flag: buy-now-enabled #}
+{% if flags['buy-now-enabled'] %}
+<a href="{{ url_for('checkout') }}" class="btn btn-warning mt-1 w-100">
+  <i class="bi bi-lightning-fill"></i> Buy Now
+</a>
+{% endif %}
+
+{# Star Ratings — flag: ratings-enabled #}
+{% if flags['ratings-enabled'] %}
+<div class="text-warning small mt-1">★★★★☆ <span class="text-muted">(128)</span></div>
+{% endif %}

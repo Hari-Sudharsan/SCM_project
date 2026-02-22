@@ -74,3 +74,55 @@ new-checkout-layout:
     classic: false
   defaultRule:
     variation: classic     # Change to "new" to activate two-column layout
+
+# ── 7. Free Shipping Banner ───────────────────────────────────────────────────
+free-shipping-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled   # change to enabled to show free shipping badge
+
+# ── 8. Stock Alert ────────────────────────────────────────────────────────────
+# Shows "Only 2 left!" warning on product cards
+stock-alert-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled
+
+# ── 9. Dark Mode ──────────────────────────────────────────────────────────────
+dark-mode-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled
+
+# ── 10. Buy Now Button ────────────────────────────────────────────────────────
+# Shows a "Buy Now" button alongside "Add to Cart" on product cards
+buy-now-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled
+
+# ── 11. Rating Display ────────────────────────────────────────────────────────
+# Shows star ratings on product cards
+ratings-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled
+
+# ── 12. Coupon Code Box ───────────────────────────────────────────────────────
+# Shows a coupon input field on the cart page
+coupon-box-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled
