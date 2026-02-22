@@ -98,7 +98,7 @@ dark-mode-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled
+    variation: enabled
 
 # ── 10. Buy Now Button ────────────────────────────────────────────────────────
 # Shows a "Buy Now" button alongside "Add to Cart" on product cards
