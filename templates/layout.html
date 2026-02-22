@@ -26,6 +26,7 @@
     ::-webkit-scrollbar-track { background:#f1f5f9; }
     ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
 
+    /* Navbar Styles */
     .navbar { background:linear-gradient(135deg,#1e1b4b 0%,#312e81 100%) !important; box-shadow:0 4px 20px rgba(79,70,229,0.3); padding:12px 0; }
     .navbar-brand { font-weight:800; font-size:1.5rem; letter-spacing:-0.5px; color:#fff !important; }
     .navbar-brand span { color:var(--accent); }
@@ -35,9 +36,11 @@
     .nav-cart-btn:hover { background:#d97706; color:#fff !important; }
     .avatar-circle { width:34px; height:34px; background:linear-gradient(135deg,var(--accent),#f97316); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem; color:#fff; }
 
+    /* Banner Styles */
     .discount-banner { background:linear-gradient(90deg,#f59e0b,#ef4444); color:#fff; font-weight:700; font-size:0.95rem; padding:11px 0; text-align:center; }
     .promo-banner { background:linear-gradient(90deg,var(--primary),#7c3aed); color:#fff; font-size:0.9rem; font-weight:500; padding:9px 0; text-align:center; }
 
+    /* Component Styles */
     .product-card { background:var(--card-bg); border:1px solid var(--border); border-radius:20px; box-shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04); transition:transform 0.3s cubic-bezier(.34,1.56,.64,1),box-shadow 0.3s ease; overflow:hidden; }
     .product-card:hover { transform:translateY(-8px) scale(1.01); box-shadow:0 20px 40px rgba(79,70,229,0.15); border-color:var(--primary); }
     .product-img { height:220px; display:flex; align-items:center; justify-content:center; font-size:6rem; background:linear-gradient(135deg,#eef2ff 0%,#f0fdf4 50%,#fef9c3 100%); position:relative; overflow:hidden; }
@@ -48,15 +51,11 @@
     .btn-warning { font-weight:700; }
 
     .category-badge { font-size:0.68rem; padding:4px 10px; border-radius:20px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
-    .flag-pill { font-size:0.72rem; padding:5px 12px; border-radius:20px; font-weight:500; }
     .section-title { font-weight:800; font-size:2rem; color:var(--text); letter-spacing:-0.5px; }
     .alert { border:none; border-radius:12px; font-weight:500; }
     footer { background:linear-gradient(135deg,#1e1b4b 0%,#312e81 100%); color:#a5b4fc; font-size:.85rem; border-top:3px solid var(--accent); }
-    .dropdown-menu { border:1px solid var(--border); border-radius:14px; box-shadow:0 10px 40px rgba(0,0,0,0.12); padding:8px; }
-    .dropdown-item { border-radius:8px; font-weight:500; font-size:0.9rem; }
+    
     .form-control, .form-select { border:1.5px solid var(--border); border-radius:10px; font-size:0.93rem; padding:10px 14px; }
-    .form-control:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(79,70,229,0.12); }
-    .form-label { font-weight:600; font-size:0.88rem; }
     hr { border-color:var(--border); opacity:1; }
     .table { color:var(--text); }
   </style>
@@ -64,171 +63,72 @@
   {% if flags is defined and flags.get('dark-mode-enabled') %}
   <style>
     /* ══════════════════════════════════════
-       DARK MODE — COMPLETE GUARANTEED FIX
-       All text uses explicit !important colors
-       so Bootstrap cannot override them
+       DARK MODE — COLOR CORRECTION FIX
+       Explicitly targeting invisible elements
     ══════════════════════════════════════ */
 
-    /* ── Page base ── */
     body, html {
-      background: #0b0b18 !important;
-      color: #e2e8f0 !important;
+      background: #0a0a14 !important;
+      color: #f1f5f9 !important;
     }
 
-    /* ── Typography — every element forced ── */
-    h1, h2, h3, h4, h5, h6 { color: #f1f5f9 !important; }
-    p, li                   { color: #cbd5e1 !important; }
-    small, .small           { color: #94a3b8 !important; }
-    strong, b               { color: #ffffff !important; }
-    label                   { color: #cbd5e1 !important; }
-    td, th                  { color: #e2e8f0 !important; }
-    span                    { color: #e2e8f0 !important; }
-    a:not(.btn):not(.nav-link):not(.navbar-brand) { color: #818cf8 !important; }
+    /* Typography Visibility */
+    h1, h2, h3, h4, h5, h6 { color: #ffffff !important; }
+    p, li, label, span, td, th { color: #cbd5e1 !important; }
+    
+    /* CRITICAL: Force strong/bold text (Product Names) to be White */
+    strong, b, .fw-bold, .fw-800, .card-title { 
+      color: #ffffff !important; 
+    }
 
-    /* ── Utility text colors ── */
-    .text-muted   { color: #64748b !important; }
-    .text-success { color: #34d399 !important; }
-    .text-danger  { color: #f87171 !important; }
-    .text-primary { color: #818cf8 !important; }
-    .text-warning { color: #fbbf24 !important; }
-    .text-dark    { color: #e2e8f0 !important; }
-    .text-white   { color: #ffffff !important; }
-    .fw-bold, strong, b { color: #ffffff !important; }
-    .section-title { color: #f1f5f9 !important; }
+    /* Target hardcoded black text from user's cart screenshot */
+    [style*="color: #111010"], [style*="color:#111010"] {
+      color: #ffffff !important;
+    }
 
-    /* ── Cards ── */
+    /* Table Contrast Fixes */
+    .table { color: #f1f5f9 !important; border-color: #252545 !important; }
+    .table td, .table th { 
+      color: #f1f5f9 !important; 
+      border-color: #1e1e3d !important; 
+      background: transparent !important;
+    }
+    .table-dark { background: #0a0a14 !important; }
+    .table-hover tbody tr:hover { background: rgba(255,255,255,0.05) !important; }
+
+    /* Success/Price Highlighting */
+    .text-success { color: #4ade80 !important; } /* Vivid Mint */
+    [style*="color: #34d399"] { color: #4ade80 !important; font-weight: 700 !important; }
+    [style*="color: #297156"] { color: #4ade80 !important; }
+
+    /* Card Adjustments */
     .card {
       background: #13132b !important;
-      border-color: #252545 !important;
-      color: #e2e8f0 !important;
+      border: 1px solid #2d2d50 !important;
     }
-    .card-body  { background: #13132b !important; color: #e2e8f0 !important; }
-    .card-header { border-color: #252545 !important; }
+    .card-body { background: #13132b !important; color: #e2e8f0 !important; }
 
-    /* Override card * but restore specific colors */
-    .card h1,.card h2,.card h3,.card h4,.card h5,.card h6 { color:#f1f5f9 !important; }
-    .card p,.card li { color:#cbd5e1 !important; }
-    .card small { color:#94a3b8 !important; }
-    .card strong,.card b { color:#ffffff !important; }
-    .card span { color:#e2e8f0 !important; }
-    .card td,.card th { color:#e2e8f0 !important; }
-    .card .text-success { color:#34d399 !important; }
-    .card .text-danger  { color:#f87171 !important; }
-    .card .text-muted   { color:#64748b !important; }
-    .card .text-decoration-line-through { color:#475569 !important; }
-
-    /* ── Product card ── */
-    .product-card {
-      background: #13132b !important;
-      border-color: #252545 !important;
-    }
-    .product-img {
-      background: linear-gradient(135deg,#1e1b4b,#14532d) !important;
-    }
-
-    /* ── Backgrounds ── */
-    .bg-white, .bg-light { background:#13132b !important; color:#e2e8f0 !important; }
-    .bg-dark { background:#0b0b18 !important; }
-
-    /* ── Navbar stays dark always ── */
-    .navbar { background:linear-gradient(135deg,#0d0b2e,#1a1760) !important; }
-
-    /* ── Tables ── */
-    .table { color:#e2e8f0 !important; border-color:#252545 !important; }
-    .table td, .table th { color:#e2e8f0 !important; border-color:#252545 !important; }
-    .table-hover tbody tr:hover { background:#1e1e3d !important; }
-    .table-dark { background:#0b0b18 !important; }
-    .table-dark td, .table-dark th { color:#e2e8f0 !important; border-color:#252545 !important; }
-
-    /* ── Forms ── */
-    .form-control, .form-select, textarea {
+    /* UI Components */
+    .form-control, .form-select {
       background: #1e1e3d !important;
-      color: #e2e8f0 !important;
-      border-color: #383870 !important;
+      color: #ffffff !important;
+      border-color: #3f3f5a !important;
     }
-    .form-control::placeholder, textarea::placeholder { color:#475569 !important; }
-    .form-control:focus, textarea:focus {
-      border-color: #6366f1 !important;
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.25) !important;
-      color: #e2e8f0 !important;
-    }
-    .form-label  { color:#c7d2fe !important; }
-    .form-check-label { color:#c7d2fe !important; }
-    .form-check-input {
-      background-color: #1e1e3d !important;
-      border-color: #6366f1 !important;
-    }
-
-    /* ── Input group ── */
-    .input-group .form-control { background:#1e1e3d !important; color:#e2e8f0 !important; }
-    .input-group-text { background:#252545 !important; color:#e2e8f0 !important; border-color:#383870 !important; }
-
-    /* ── Dropdowns ── */
-    .dropdown-menu {
-      background: #1a1a35 !important;
-      border-color: #252545 !important;
-    }
-    .dropdown-item         { color:#e2e8f0 !important; }
-    .dropdown-item:hover   { background:#252545 !important; color:#ffffff !important; }
-    .dropdown-item-text    { color:#64748b !important; }
-    .dropdown-divider      { border-color:#252545 !important; }
-    .dropdown-item.text-danger { color:#f87171 !important; }
-
-    /* ── Alerts ── */
-    .alert         { border:1px solid transparent !important; }
-    .alert *       { color:inherit !important; }
-    .alert-success  { background:#052e16 !important; color:#86efac !important; border-color:#166534 !important; }
-    .alert-danger   { background:#450a0a !important; color:#fca5a5 !important; border-color:#991b1b !important; }
-    .alert-info     { background:#082f49 !important; color:#7dd3fc !important; border-color:#0369a1 !important; }
-    .alert-warning  { background:#431407 !important; color:#fed7aa !important; border-color:#9a3412 !important; }
-    .alert-secondary{ background:#1e1b4b !important; color:#a5b4fc !important; border-color:#3730a3 !important; }
-    .btn-close      { filter:invert(1) brightness(1.5) !important; }
-
-    /* ── Badges ── */
-    .badge.bg-primary   { background:#3730a3 !important; color:#e0e7ff !important; }
-    .badge.bg-success   { background:#14532d !important; color:#86efac !important; }
-    .badge.bg-danger    { background:#7f1d1d !important; color:#fecaca !important; }
-    .badge.bg-warning   { background:#78350f !important; color:#fde68a !important; }
-    .badge.bg-secondary { background:#334155 !important; color:#cbd5e1 !important; }
-    .badge.bg-info      { background:#0c4a6e !important; color:#bae6fd !important; }
-    .badge.bg-dark      { background:#0b0b18 !important; color:#e2e8f0 !important; }
-    .badge.bg-light     { background:#334155 !important; color:#e2e8f0 !important; }
-
-    /* ── Card headers ── */
-    .card-header.bg-dark    { background:#0b0b18 !important; color:#e2e8f0 !important; }
-    .card-header.bg-success { background:#14532d !important; color:#86efac !important; }
-    .card-header.bg-primary { background:#1e1b4b !important; color:#c7d2fe !important; }
-
-    /* ── Code / Pre ── */
-    pre  {
-      background: #050510 !important;
-      color: #4ade80 !important;
-      border: 1px solid #14532d !important;
-      border-radius: 10px !important;
-    }
-    code {
-      color: #a5b4fc !important;
-      background: #1e1b4b !important;
-      padding: 2px 6px !important;
-      border-radius: 4px !important;
-    }
-
-    /* ── HR ── */
-    hr { border-color:#252545 !important; opacity:1 !important; }
-
-    /* ── Footer ── */
-    footer { background:#080814 !important; }
-    footer p, footer small, footer span { color:#818cf8 !important; }
-    footer .fw-bold, footer strong { color:#ffffff !important; }
-
-    /* ── Sticky card in checkout ── */
-    .sticky-top.card { background:#13132b !important; }
+    .form-label { color: #a5b4fc !important; }
+    hr { border-color: rgba(255,255,255,0.1) !important; }
+    
+    /* Navbar override for Dark Mode */
+    .navbar { background: linear-gradient(135deg,#050510,#1e1b4b) !important; }
+    
+    /* Dropdown Menus */
+    .dropdown-menu { background: #1a1a35 !important; border-color: #2d2d50 !important; }
+    .dropdown-item { color: #e2e8f0 !important; }
+    .dropdown-item:hover { background: #2d2d50 !important; color: #fff !important; }
   </style>
   {% endif %}
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark">
   <div class="container">
     <a class="navbar-brand" href="{{ url_for('index') }}">
@@ -240,81 +140,44 @@
     </button>
     <div class="collapse navbar-collapse" id="navMenu">
       <ul class="navbar-nav ms-auto align-items-center gap-1">
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('index') }}">
-            <i class="bi bi-house-fill me-1"></i>Home
-          </a>
-        </li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}"><i class="bi bi-house-fill me-1"></i>Home</a></li>
         <li class="nav-item">
           <a class="nav-link nav-cart-btn ms-1" href="{{ url_for('cart') }}">
             <i class="bi bi-cart3 me-1"></i>Cart
             {% if cart_count > 0 %}
-            <span class="badge bg-dark rounded-pill ms-1"
-                  style="color:#fff !important;">{{ cart_count }}</span>
+            <span class="badge bg-dark rounded-pill ms-1" style="color:#fff !important;">{{ cart_count }}</span>
             {% endif %}
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('admin_flags') }}">
-            <i class="bi bi-toggles me-1"></i>Flags
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('admin_orders') }}">
-            <i class="bi bi-receipt me-1"></i>Orders
-          </a>
-        </li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_flags') }}"><i class="bi bi-toggles me-1"></i>Flags</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_orders') }}"><i class="bi bi-receipt me-1"></i>Orders</a></li>
 
         {% if session.get('user') %}
         <li class="nav-item dropdown ms-1">
-          <a class="nav-link dropdown-toggle d-flex align-items-center gap-2"
-             href="#" role="button" data-bs-toggle="dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
             <span class="avatar-circle">{{ session['user'][0].upper() }}</span>
             <span style="color:#fff !important;">{{ session['user'] }}</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end shadow">
-            <li>
-              <span class="dropdown-item-text small px-3"
-                    style="color:#64748b;">
-                Signed in as
-                <strong style="color:#1e293b;">{{ session['user'] }}</strong>
-              </span>
-            </li>
+            <li><span class="dropdown-item-text small px-3">Signed in as <strong>{{ session['user'] }}</strong></span></li>
             <li><hr class="dropdown-divider mx-2"/></li>
-            <li>
-              <a class="dropdown-item px-3 py-2"
-                 style="color:#ef4444 !important;"
-                 href="{{ url_for('logout') }}">
-                <i class="bi bi-box-arrow-right me-2"></i>Logout
-              </a>
-            </li>
+            <li><a class="dropdown-item px-3 py-2 text-danger" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
           </ul>
         </li>
         {% else %}
-        <li class="nav-item ms-1">
-          <a class="nav-link btn btn-outline-light btn-sm px-4 rounded-pill"
-             href="{{ url_for('login') }}">
-            <i class="bi bi-person-circle me-1"></i>Login
-          </a>
-        </li>
+        <li class="nav-item ms-1"><a class="nav-link btn btn-outline-light btn-sm px-4 rounded-pill" href="{{ url_for('login') }}"><i class="bi bi-person-circle me-1"></i>Login</a></li>
         {% endif %}
-
       </ul>
     </div>
   </div>
 </nav>
 
 {% if flags is defined and flags.get('promo-banner-enabled') %}
-<div class="promo-banner">
-  <i class="bi bi-megaphone-fill me-2"></i>{{ flags['promo-banner-text'] }}
-</div>
+<div class="promo-banner"><i class="bi bi-megaphone-fill me-2"></i>{{ flags['promo-banner-text'] }}</div>
 {% endif %}
 
 {% if flags is defined and flags.get('discount-banner-enabled') %}
-<div class="discount-banner">
-  🏷️ FLAT {{ flags['discount-percentage'] }}% OFF today! Code:
-  <strong>SAVE{{ flags['discount-percentage'] }}</strong>
-</div>
+<div class="discount-banner">🏷️ FLAT {{ flags['discount-percentage'] }}% OFF today! Code: <strong>SAVE{{ flags['discount-percentage'] }}</strong></div>
 {% endif %}
 
 <div class="container mt-3">
@@ -330,18 +193,10 @@
 
 <footer class="py-4 mt-5">
   <div class="container text-center">
-    <p class="mb-1 fw-bold fs-5" style="color:#ffffff !important;">
-      <i class="bi bi-bag-heart-fill" style="color:#f59e0b;"></i> ShopSmart
-    </p>
-    <p class="mb-2" style="color:#a5b4fc !important;">
-      Real-Time Feature Management — SCM with Git + GO Feature Flag
-    </p>
+    <p class="mb-1 fw-bold fs-5" style="color:#ffffff !important;"><i class="bi bi-bag-heart-fill" style="color:#f59e0b;"></i> ShopSmart</p>
+    <p class="mb-2" style="color:#a5b4fc !important;">Real-Time Feature Management — SCM with Git + GO Feature Flag</p>
     <a href="{{ url_for('admin_flags') }}" class="text-decoration-none">
-      <span class="badge rounded-pill px-3 py-2"
-            style="background:rgba(255,255,255,0.1);
-                   color:#a5b4fc !important; font-size:0.8rem;">
-        <i class="bi bi-toggles me-1"></i>View Live Flag Status
-      </span>
+      <span class="badge rounded-pill px-3 py-2" style="background:rgba(255,255,255,0.1); color:#a5b4fc !important; font-size:0.8rem;"><i class="bi bi-toggles me-1"></i>View Live Flag Status</span>
     </a>
   </div>
 </footer>

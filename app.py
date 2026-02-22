@@ -283,11 +283,10 @@ def checkout():
         flags=flags,
         total=total,
         coupon=coupon,
-        best_discount=best_discount,
+        discount=best_discount,  # ADD THIS LINE: Maps best_discount to 'discount'
         final_total=final_total,
         cart_count=sum(cart.values()),
     )
-
 
 @app.route("/order-success")
 def order_success():

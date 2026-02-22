@@ -1,19 +1,25 @@
 {% extends "layout.html" %}
 {% block title %}Checkout{% endblock %}
 {% block content %}
-<h2 class="fw-bold mb-4"><i class="bi bi-bag-check"></i> Checkout</h2>
+<h2 class="fw-bold mb-4" style="color: var(--bs-heading-color, #ffffff);"><i class="bi bi-bag-check"></i> Checkout</h2>
+
+{# Fallback to prevent UndefinedError #}
+{% set current_discount = discount if discount is defined else 0 %}
+{% set current_total = total if total is defined else 0 %}
+{% set current_final = final_total if final_total is defined else (current_total - current_discount) %}
 
 {% if flags['new-checkout-layout'] %}
-<div class="alert alert-info mb-4">
+<div class="alert alert-info mb-4 border-0 shadow-sm" style="background: rgba(13, 202, 240, 0.1); color: #0dcaf0;">
   <i class="bi bi-toggles2 me-2"></i>
   <strong>New Two-Column Layout Active</strong> — controlled by <code>new-checkout-layout</code> flag
 </div>
+
 <form action="{{ url_for('checkout') }}" method="POST">
   <div class="row g-4">
     <div class="col-md-7">
       <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-primary text-white fw-bold"><i class="bi bi-geo-alt"></i> Shipping Details</div>
-        <div class="card-body">
+        <div class="card-header bg-primary text-white fw-bold py-3"><i class="bi bi-geo-alt"></i> Shipping Details</div>
+        <div class="card-body p-4">
           <div class="row g-3">
             <div class="col-6"><label class="form-label">First Name</label><input type="text" class="form-control" placeholder="Ravi" required/></div>
             <div class="col-6"><label class="form-label">Last Name</label><input type="text" class="form-control" placeholder="Kumar" required/></div>
@@ -24,31 +30,51 @@
           </div>
         </div>
       </div>
+
       <div class="card border-0 shadow-sm">
-        <div class="card-header bg-dark text-white fw-bold"><i class="bi bi-credit-card"></i> Payment Method</div>
-        <div class="card-body">
-          <div class="form-check mb-2"><input class="form-check-input" type="radio" name="payment_method" id="c1" value="card" checked/><label class="form-check-label" for="c1"><i class="bi bi-credit-card-2-front text-primary"></i> Credit / Debit Card</label></div>
-          <div class="form-check mb-2"><input class="form-check-input" type="radio" name="payment_method" id="u1" value="upi"/><label class="form-check-label" for="u1"><i class="bi bi-phone text-success"></i> UPI</label></div>
-          <div class="form-check mb-2"><input class="form-check-input" type="radio" name="payment_method" id="n1" value="netbanking"/><label class="form-check-label" for="n1"><i class="bi bi-bank text-warning"></i> Net Banking</label></div>
+        <div class="card-header bg-dark text-white fw-bold py-3"><i class="bi bi-credit-card"></i> Payment Method</div>
+        <div class="card-body p-4">
+          <div class="form-check mb-3"><input class="form-check-input" type="radio" name="payment_method" id="c1" value="card" checked/><label class="form-check-label" for="c1"><i class="bi bi-credit-card-2-front text-primary me-2"></i> Credit / Debit Card</label></div>
+          <div class="form-check mb-3"><input class="form-check-input" type="radio" name="payment_method" id="u1" value="upi"/><label class="form-check-label" for="u1"><i class="bi bi-phone text-success me-2"></i> UPI</label></div>
+          <div class="form-check mb-3"><input class="form-check-input" type="radio" name="payment_method" id="n1" value="netbanking"/><label class="form-check-label" for="n1"><i class="bi bi-bank text-warning me-2"></i> Net Banking</label></div>
+          
           {% if flags['cash-on-delivery-enabled'] %}
-          <div class="form-check"><input class="form-check-input" type="radio" name="payment_method" id="cod1" value="cod"/><label class="form-check-label" for="cod1"><i class="bi bi-cash-coin text-danger"></i> Cash on Delivery <span class="badge bg-success ms-2">COD Available</span></label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="payment_method" id="cod1" value="cod"/><label class="form-check-label" for="cod1"><i class="bi bi-cash-coin text-danger me-2"></i> Cash on Delivery <span class="badge bg-success-subtle text-success ms-2">Available</span></label></div>
           {% else %}
-          <div class="text-muted mt-2 small"><i class="bi bi-x-circle text-danger"></i> Cash on Delivery unavailable <span class="badge bg-secondary ms-1">FLAG OFF</span></div>
+          <div class="text-muted mt-2 small p-2 rounded" style="background: rgba(255,255,255,0.05);">
+            <i class="bi bi-x-circle text-danger me-1"></i> Cash on Delivery unavailable <span class="badge bg-secondary ms-1">FLAG OFF</span>
+          </div>
           {% endif %}
         </div>
       </div>
     </div>
+
     <div class="col-md-5">
-      <div class="card border-0 shadow-sm sticky-top" style="top:80px">
-        <div class="card-header bg-success text-white fw-bold"><i class="bi bi-receipt"></i> Order Total</div>
-        <div class="card-body">
-          <div class="d-flex justify-content-between mb-2"><span>Subtotal</span><span>Rs.{{ "%.2f"|format(total) }}</span></div>
-          {% if flags['discount-banner-enabled'] %}<div class="d-flex justify-content-between mb-2 text-success"><span>Discount ({{ flags['discount-percentage'] }}%)</span><span>-Rs.{{ "%.2f"|format(discount) }}</span></div>{% endif %}
-          <div class="d-flex justify-content-between mb-2"><span>Shipping</span><span class="text-success">FREE</span></div>
-          <hr/>
-          <div class="d-flex justify-content-between fw-bold fs-5"><span>Grand Total</span><span class="text-success">Rs.{{ "%.2f"|format(final_total) }}</span></div>
-          <button type="submit" class="btn btn-success w-100 mt-3 py-2 fw-bold"><i class="bi bi-lock-fill me-1"></i> Place Order</button>
-          <a href="{{ url_for('cart') }}" class="btn btn-outline-secondary w-100 mt-2"><i class="bi bi-arrow-left"></i> Back to Cart</a>
+      <div class="card border-0 shadow-lg sticky-top" style="top:80px; background: #161625 !important; border: 1px solid #2d2d45 !important;">
+        <div class="card-header bg-success text-white fw-bold py-3"><i class="bi bi-receipt"></i> Order Total</div>
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between mb-2"><span class="text-muted">Subtotal</span><span class="fw-bold text-white">Rs.{{ "%.2f"|format(current_total) }}</span></div>
+          
+          {% if flags['discount-banner-enabled'] %}
+          <div class="d-flex justify-content-between mb-2 text-success">
+            <span>Discount ({{ flags['discount-percentage'] }}%)</span>
+            <span class="fw-bold">-Rs.{{ "%.2f"|format(current_discount) }}</span>
+          </div>
+          {% endif %}
+          
+          <div class="d-flex justify-content-between mb-2"><span class="text-muted">Shipping</span><span style="color: #34d399;" class="fw-bold">FREE</span></div>
+          <hr style="border-color: rgba(255,255,255,0.1);"/>
+          <div class="d-flex justify-content-between fw-bold fs-4 mb-4">
+            <span class="text-white">Grand Total</span>
+            <span style="color: #34d399;">Rs.{{ "%.2f"|format(current_final) }}</span>
+          </div>
+          
+          <button type="submit" class="btn btn-success btn-lg w-100 py-3 fw-bold rounded-pill shadow mb-2">
+            <i class="bi bi-lock-fill me-1"></i> Place Order
+          </button>
+          <a href="{{ url_for('cart') }}" class="btn btn-outline-secondary w-100 rounded-pill">
+            <i class="bi bi-arrow-left"></i> Back to Cart
+          </a>
         </div>
       </div>
     </div>
@@ -56,44 +82,52 @@
 </form>
 
 {% else %}
-<div class="alert alert-secondary mb-4">
+<div class="alert alert-secondary mb-4 border-0 shadow-sm" style="background: rgba(255,255,255,0.05); color: #cbd5e1;">
   <i class="bi bi-layout-text-sidebar me-2"></i>
   <strong>Classic Layout</strong> — Set <code>new-checkout-layout: variation: new</code> in flags.yaml to try the new layout.
 </div>
+
 <div class="row justify-content-center">
   <div class="col-lg-6">
     <form action="{{ url_for('checkout') }}" method="POST">
       <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-dark text-white fw-bold"><i class="bi bi-geo-alt"></i> Shipping Details</div>
-        <div class="card-body">
+        <div class="card-header bg-dark text-white fw-bold py-3"><i class="bi bi-geo-alt"></i> Shipping Details</div>
+        <div class="card-body p-4">
           <div class="mb-3"><label class="form-label">Full Name</label><input type="text" class="form-control" placeholder="Ravi Kumar" required/></div>
           <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" placeholder="ravi@example.com" required/></div>
           <div class="mb-3"><label class="form-label">Address</label><textarea class="form-control" rows="2" placeholder="123, MG Road, Bangalore" required></textarea></div>
         </div>
       </div>
+
       <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-dark text-white fw-bold"><i class="bi bi-credit-card"></i> Payment Method</div>
-        <div class="card-body">
-          <div class="form-check mb-2"><input class="form-check-input" type="radio" name="payment_method" id="c2" value="card" checked/><label class="form-check-label" for="c2"><i class="bi bi-credit-card-2-front text-primary"></i> Credit / Debit Card</label></div>
-          <div class="form-check mb-2"><input class="form-check-input" type="radio" name="payment_method" id="u2" value="upi"/><label class="form-check-label" for="u2"><i class="bi bi-phone text-success"></i> UPI</label></div>
-          <div class="form-check mb-2"><input class="form-check-input" type="radio" name="payment_method" id="n2" value="netbanking"/><label class="form-check-label" for="n2"><i class="bi bi-bank text-warning"></i> Net Banking</label></div>
+        <div class="card-header bg-dark text-white fw-bold py-3"><i class="bi bi-credit-card"></i> Payment Method</div>
+        <div class="card-body p-4">
+          <div class="form-check mb-2"><input class="form-check-input" type="radio" name="payment_method" id="c2" value="card" checked/><label class="form-check-label" for="c2">Credit Card</label></div>
+          <div class="form-check mb-2"><input class="form-check-input" type="radio" name="payment_method" id="u2" value="upi"/><label class="form-check-label" for="u2">UPI</label></div>
           {% if flags['cash-on-delivery-enabled'] %}
-          <div class="form-check"><input class="form-check-input" type="radio" name="payment_method" id="cod2" value="cod"/><label class="form-check-label" for="cod2"><i class="bi bi-cash-coin text-danger"></i> Cash on Delivery <span class="badge bg-success ms-2">Available</span></label></div>
-          {% else %}
-          <div class="text-muted mt-2 small"><i class="bi bi-x-circle text-danger"></i> Cash on Delivery unavailable <span class="badge bg-secondary ms-1">FLAG OFF</span></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="payment_method" id="cod2" value="cod"/><label class="form-check-label" for="cod2">Cash on Delivery</label></div>
           {% endif %}
         </div>
       </div>
+
       <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-success text-white fw-bold"><i class="bi bi-receipt"></i> Order Total</div>
-        <div class="card-body">
-          <div class="d-flex justify-content-between mb-1"><span>Subtotal</span><span>Rs.{{ "%.2f"|format(total) }}</span></div>
-          {% if flags['discount-banner-enabled'] %}<div class="d-flex justify-content-between mb-1 text-success"><span>Discount ({{ flags['discount-percentage'] }}%)</span><span>-Rs.{{ "%.2f"|format(discount) }}</span></div>{% endif %}
-          <hr/><div class="d-flex justify-content-between fw-bold"><span>Grand Total</span><span class="text-success">Rs.{{ "%.2f"|format(final_total) }}</span></div>
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between mb-1"><span class="text-muted">Subtotal</span><span class="text-white">Rs.{{ "%.2f"|format(current_total) }}</span></div>
+          {% if flags['discount-banner-enabled'] %}
+          <div class="d-flex justify-content-between mb-1 text-success">
+            <span>Discount</span><span>-Rs.{{ "%.2f"|format(current_discount) }}</span>
+          </div>
+          {% endif %}
+          <hr style="border-color: rgba(255,255,255,0.1);"/>
+          <div class="d-flex justify-content-between fw-bold fs-5">
+            <span class="text-white">Grand Total</span>
+            <span style="color: #34d399;">Rs.{{ "%.2f"|format(current_final) }}</span>
+          </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success w-100 fw-bold py-2"><i class="bi bi-lock-fill me-1"></i> Place Order</button>
-      <a href="{{ url_for('cart') }}" class="btn btn-outline-secondary w-100 mt-2"><i class="bi bi-arrow-left"></i> Back to Cart</a>
+      
+      <button type="submit" class="btn btn-success btn-lg w-100 fw-bold py-3 rounded-pill shadow"><i class="bi bi-lock-fill me-1"></i> Place Order</button>
+      <a href="{{ url_for('cart') }}" class="btn btn-link w-100 mt-2 text-decoration-none text-muted">Back to Cart</a>
     </form>
   </div>
 </div>

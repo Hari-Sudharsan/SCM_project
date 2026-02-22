@@ -1,64 +1,100 @@
 {% extends "layout.html" %}
 {% block title %}Cart{% endblock %}
 {% block content %}
-<h2 class="fw-bold mb-4"><i class="bi bi-cart3"></i> Your Cart</h2>
+<h2 class="fw-bold mb-4" style="color: var(--bs-heading-color, #ffffff);"><i class="bi bi-cart3"></i> Your Cart</h2>
+
 {% if items %}
 <div class="row">
   <div class="col-lg-8">
-    <div class="card border-0 shadow-sm">
+    <div class="card border-0 shadow-sm mb-4">
       <div class="card-body p-0">
-        <table class="table table-hover mb-0 align-middle">
-          <thead class="table-dark">
-            <tr><th>Product</th><th class="text-center">Qty</th><th class="text-end">Subtotal</th></tr>
-          </thead>
-          <tbody>
-            {% for item in items %}
-            <tr>
-              <td><strong>{{ item.name }}</strong><br><small class="text-muted">Rs.{{ "%.2f"|format(item.price) }} each</small></td>
-              <td class="text-center"><span class="badge bg-primary rounded-pill px-3 py-2">{{ item.qty }}</span></td>
-              <td class="text-end fw-bold">Rs.{{ "%.2f"|format(item.subtotal) }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th class="ps-4">Product</th>
+                <th class="text-center">Qty</th>
+                <th class="text-end pe-4">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+              <tr>
+                <td class="ps-4">
+                  <strong style="color: var(--bs-heading-color, #ffffff);">{{ item.name }}</strong><br>
+                  <small class="text-muted">Rs.{{ "%.2f"|format(item.price) }} each</small>
+                </td>
+                <td class="text-center">
+                  <span class="badge bg-primary rounded-pill px-3 py-2">{{ item.qty }}</span>
+                </td>
+                <td class="text-end pe-4 fw-bold" style="color: #34d399;">
+                  Rs.{{ "%.2f"|format(item.subtotal) }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <div class="mt-3">
-      <a href="{{ url_for('index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Continue Shopping</a>
-      <a href="{{ url_for('clear_cart') }}" class="btn btn-outline-danger ms-2"><i class="bi bi-trash"></i> Clear Cart</a>
+      <a href="{{ url_for('index') }}" class="btn btn-outline-secondary rounded-pill px-4">
+        <i class="bi bi-arrow-left"></i> Continue Shopping
+      </a>
+      <a href="{{ url_for('clear_cart') }}" class="btn btn-outline-danger rounded-pill px-4 ms-2">
+        <i class="bi bi-trash"></i> Clear Cart
+      </a>
     </div>
   </div>
+
   <div class="col-lg-4 mt-4 mt-lg-0">
-    <div class="card border-0 shadow-sm">
-      <div class="card-header bg-dark text-white fw-bold"><i class="bi bi-receipt"></i> Order Summary</div>
-      <div class="card-body">
-        <div class="d-flex justify-content-between mb-2"><span>Subtotal</span><span>Rs.{{ "%.2f"|format(total) }}</span></div>
+    <div class="card border-0 shadow-lg" style="background: #1a1a2e !important; border: 1px solid #2d2d50 !important;">
+      <div class="card-header bg-dark text-white fw-bold py-3">
+        <i class="bi bi-receipt"></i> Order Summary
+      </div>
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between mb-3">
+          <span class="text-muted">Subtotal</span>
+          <span class="fw-bold" style="color: #ffffff;">Rs.{{ "%.2f"|format(total) }}</span>
+        </div>
+
+        {% set current_discount = discount if discount is defined else 0 %}
+
         {% if flags['discount-banner-enabled'] %}
-        <div class="d-flex justify-content-between mb-2 text-success">
-          <span><i class="bi bi-tag-fill"></i> Discount ({{ flags['discount-percentage'] }}%) <span class="badge bg-success ms-1">FLAG ON</span></span>
-          <span>-Rs.{{ "%.2f"|format(discount) }}</span>
+        <div class="d-flex justify-content-between mb-3 text-success">
+          <span class="small">
+            <i class="bi bi-tag-fill"></i> Discount ({{ flags['discount-percentage'] }}%)
+          </span>
+          <span class="fw-bold" style="color: #4ade80;">-Rs.{{ "%.2f"|format(current_discount) }}</span>
         </div>
         {% else %}
-        <div class="d-flex justify-content-between mb-2 text-muted">
-          <span>Discount</span><span class="badge bg-secondary">FLAG OFF</span>
+        <div class="d-flex justify-content-between mb-3">
+          <span class="text-muted small">Discount</span>
+          <span class="badge bg-secondary-subtle text-secondary small">Flag Disabled</span>
         </div>
         {% endif %}
-        <hr/>
-        <div class="d-flex justify-content-between fw-bold fs-5">
-          <span>Total</span><span class="text-success">Rs.{{ "%.2f"|format(total - discount) }}</span>
+        
+        <hr style="border-color: rgba(255, 255, 255, 0.15);">
+        
+        <div class="d-flex justify-content-between fw-bold fs-4 mt-3">
+          <span style="color: #ffffff;">Total</span>
+          <span style="color: #34d399;">Rs.{{ "%.2f"|format(total - current_discount) }}</span>
         </div>
-        <a href="{{ url_for('checkout') }}" class="btn btn-success w-100 mt-3">
-          <i class="bi bi-credit-card"></i> Proceed to Checkout
+
+        <a href="{{ url_for('checkout') }}" class="btn btn-success btn-lg w-100 mt-4 py-3 fw-bold rounded-pill shadow">
+          <i class="bi bi-credit-card me-2"></i>Proceed to Checkout
         </a>
       </div>
     </div>
   </div>
 </div>
 {% else %}
-<div class="text-center py-5">
-  <div style="font-size:5rem">🛒</div>
+<div class="text-center py-5 rounded-4 shadow-sm" style="background: rgba(255,255,255,0.05);">
+  <div style="font-size:5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));">🛒</div>
   <h4 class="mt-3 text-muted">Your cart is empty</h4>
-  <a href="{{ url_for('index') }}" class="btn btn-primary mt-2"><i class="bi bi-shop"></i> Start Shopping</a>
+  <a href="{{ url_for('index') }}" class="btn btn-primary mt-3 px-5 rounded-pill">
+    <i class="bi bi-shop me-2"></i>Start Shopping
+  </a>
 </div>
 {% endif %}
 {% endblock %}
