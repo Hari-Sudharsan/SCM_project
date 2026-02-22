@@ -126,3 +126,13 @@ coupon-box-enabled:
     disabled: false
   defaultRule:
     variation: enabled
+
+# ── 13. Coupon Code Box ───────────────────────────────────────────────────────
+# Shows the coupon input box on the cart page.
+# When disabled, coupon entry is hidden from customers.
+coupon-box-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled   # change to enabled to show coupon box    
