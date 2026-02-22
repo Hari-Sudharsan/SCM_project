@@ -81,7 +81,7 @@ free-shipping-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # change to enabled to show free shipping badge
+    variation: enabled   # change to enabled to show free shipping badge
 
 # ── 8. Stock Alert ────────────────────────────────────────────────────────────
 # Shows "Only 2 left!" warning on product cards
@@ -90,7 +90,7 @@ stock-alert-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled
+    variation: enabled
 
 # ── 9. Dark Mode ──────────────────────────────────────────────────────────────
 dark-mode-enabled:
@@ -98,7 +98,7 @@ dark-mode-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled
+    variation: enabled
 
 # ── 10. Buy Now Button ────────────────────────────────────────────────────────
 # Shows a "Buy Now" button alongside "Add to Cart" on product cards
@@ -107,7 +107,7 @@ buy-now-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled
+    variation: enabled
 
 # ── 11. Rating Display ────────────────────────────────────────────────────────
 # Shows star ratings on product cards
@@ -116,7 +116,7 @@ ratings-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled
+    variation: enabled
 
 # ── 12. Coupon Code Box ───────────────────────────────────────────────────────
 # Shows a coupon input field on the cart page
@@ -125,4 +125,4 @@ coupon-box-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled
+    variation: enabled
