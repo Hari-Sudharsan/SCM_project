@@ -51,7 +51,7 @@ promo-banner-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # Change to "enabled" to show the promo strip
+    variation: enabled   # Change to "enabled" to show the promo strip
 
 # ── 5. Promotional Banner Text ────────────────────────────────────────────────
 # The message shown inside the promotional banner.
