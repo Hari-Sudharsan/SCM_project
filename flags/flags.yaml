@@ -51,7 +51,7 @@ promo-banner-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled   # Change to "enabled" to show the promo strip
+    variation: enabled    # Change to "enabled" to show the promo strip
 
 # ── 5. Promotional Banner Text ────────────────────────────────────────────────
 # The message shown inside the promotional banner.
@@ -61,7 +61,7 @@ promo-banner-text:
     festive: "🎊 Festive Offers: Free Shipping on orders above ₹999!"
     default: "Welcome to ShopSmart — India's favourite online store!"
   defaultRule:
-    variation: default      # Change to "sale" or "festive" for campaigns
+    variation: sale      # Change to "sale" or "festive" for campaigns
 
 # ── 6. New Checkout Layout ────────────────────────────────────────────────────
 # Toggles the checkout page UI between:
