@@ -42,7 +42,7 @@ cash-on-delivery-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: enabled    # Change to "enabled" to allow COD
+    variation: enabled   # Change to "enabled" to allow COD
 
 # ── 4. Promotional Banner ─────────────────────────────────────────────────────
 # Shows a coloured strip banner at the top of every page.
