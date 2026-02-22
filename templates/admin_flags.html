@@ -3,8 +3,10 @@
 
 {% block content %}
 
-<h2 class="fw-bold mb-1"><i class="bi bi-toggles text-primary"></i> Feature Flag Dashboard</h2>
-<p class="text-muted mb-4">
+<h2 class="fw-bold mb-1">
+  <i class="bi bi-toggles" style="color:#4f46e5;"></i> Feature Flag Dashboard
+</h2>
+<p class="mb-4" style="font-size:0.95rem;">
   Live values from GO Feature Flag Relay Proxy. Demonstrates
   <strong>SCM Configuration Status Accounting</strong>.
 </p>
@@ -12,59 +14,64 @@
 <div class="row g-4">
   {% for key, val in flags.items() %}
   <div class="col-md-6 col-lg-4">
-    <div class="card border-0 shadow-sm rounded-4 h-100">
-      <div class="card-body p-4">
+    <div class="card border-0 shadow-sm h-100"
+         style="border-radius:16px; overflow:hidden;">
 
-        <!-- Flag key name -->
-        <div class="d-flex align-items-center gap-2 mb-3">
-          {% if val == true %}
-            <span class="fs-4">✅</span>
-          {% elif val == false %}
-            <span class="fs-4">⛔</span>
-          {% else %}
-            <span class="fs-4">💬</span>
-          {% endif %}
-          <code class="fw-bold" style="font-size:0.85rem;">{{ key }}</code>
-        </div>
-
-        <!-- Flag value box -->
+      <!-- Card Header — flag name -->
+      <div class="card-header border-0 d-flex align-items-center gap-2 py-3 px-4"
+           style="background:{% if val == true %}#0f2d1a{% elif val == false %}#1a1a35{% else %}#1a1205{% endif %};">
         {% if val == true %}
-        <div class="p-3 rounded-3 text-center flag-card-value-true"
-             style="background:#d1fae5;">
-          <span class="fw-bold fs-5 text-success">
-            <i class="bi bi-check-circle-fill"></i> ENABLED
-          </span>
-        </div>
+          <span style="font-size:1.3rem;">✅</span>
         {% elif val == false %}
-        <div class="p-3 rounded-3 text-center flag-card-value-false"
-             style="background:#f3f4f6;">
-          <span class="fw-bold fs-5 text-secondary">
-            <i class="bi bi-x-circle-fill"></i> DISABLED
-          </span>
-        </div>
+          <span style="font-size:1.3rem;">⛔</span>
         {% else %}
-        <div class="p-3 rounded-3 text-center flag-card-value-text"
-             style="background:#dbeafe;">
-          <span class="fw-bold text-primary">
-            <i class="bi bi-type"></i> "{{ val }}"
-          </span>
-        </div>
+          <span style="font-size:1.3rem;">💬</span>
         {% endif %}
-
+        <code style="font-size:0.82rem; font-weight:700;
+                     color:{% if val == true %}#86efac{% elif val == false %}#a5b4fc{% else %}#fcd34d{% endif %};">
+          {{ key }}
+        </code>
       </div>
+
+      <!-- Card Body — flag value -->
+      <div class="card-body p-4 d-flex align-items-center justify-content-center"
+           style="min-height:90px;
+                  background:{% if val == true %}#052e16{% elif val == false %}#0f0f2d{% else %}#1c1200{% endif %};">
+        {% if val == true %}
+          <div class="text-center">
+            <div style="font-size:1.6rem; font-weight:800; color:#4ade80; letter-spacing:1px;">
+              ✔ ENABLED
+            </div>
+          </div>
+        {% elif val == false %}
+          <div class="text-center">
+            <div style="font-size:1.6rem; font-weight:800; color:#f87171; letter-spacing:1px;">
+              ✖ DISABLED
+            </div>
+          </div>
+        {% else %}
+          <div class="text-center">
+            <div style="font-size:1rem; font-weight:700; color:#fcd34d; word-break:break-all;">
+              "{{ val }}"
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
     </div>
   </div>
   {% endfor %}
 </div>
 
 <!-- Git Commands Panel -->
-<div class="card mt-5 border-0 shadow-sm rounded-4">
-  <div class="card-body p-4">
-    <h5 class="fw-bold mb-3">
-      <i class="bi bi-terminal-fill text-success"></i> SCM Git Audit Commands
-    </h5>
-    <pre class="rounded-3 p-3 small mb-0"
-         style="background:#0f172a; color:#4ade80;">
+<div class="mt-5 rounded-4 p-4"
+     style="background:#0d0d1a; border:1px solid #2d2d50;">
+  <h5 class="fw-bold mb-3" style="color:#ffffff;">
+    <i class="bi bi-terminal-fill" style="color:#4ade80;"></i> SCM Git Audit Commands
+  </h5>
+  <pre class="rounded-3 p-4 mb-0"
+       style="background:#050510; color:#4ade80; font-size:0.85rem;
+              border:1px solid #1a3a1a; line-height:1.8;">
 # View full commit history of flags file
 git log --oneline flags/flags.yaml
 
@@ -75,9 +82,7 @@ git diff HEAD~1 HEAD -- flags/flags.yaml
 git log --format="%H %ai %an: %s" -- flags/flags.yaml
 
 # Rollback last 3 flag changes
-git revert HEAD~3..HEAD --no-edit
-    </pre>
-  </div>
+git revert HEAD~3..HEAD --no-edit</pre>
 </div>
 
 {% endblock %}
