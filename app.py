@@ -17,10 +17,21 @@ print(f"  BASE_DIR    : {BASE_DIR}")
 print(f"  TEMPLATE_DIR: {TEMPLATE_DIR}")
 print(f"  templates exist: {os.path.isdir(TEMPLATE_DIR)}")
 print("=" * 60)
+PUBLIC_ROUTES = {"login", "static"}
 
+
+        
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 app.secret_key = "ecommerce-scm-demo-secret-2024"
 
+# Pages that don't require login
+PUBLIC_ROUTES = {"login", "static"}
+
+@app.before_request
+def require_login():
+    if request.endpoint and request.endpoint not in PUBLIC_ROUTES:
+        if not session.get("user"):
+            return redirect(url_for("login"))
 # ---------------------------------------------------------------------------
 # RELAY PROXY
 # ---------------------------------------------------------------------------
@@ -294,12 +305,18 @@ def clear_cart():
 def login():
     if request.method == "POST":
         username = request.form.get("username", "").strip()
-        if username:
+        password = request.form.get("password", "").strip()
+        if username and password:          # any non-empty username + password works
             session["user"] = username
             flash(f"Welcome, {username}!", "success")
             return redirect(url_for("index"))
-        flash("Please enter a username.", "danger")
-    return render_template("login.html", flags=get_all_flags(), cart_count=0)
+        flash("Please enter both username and password.", "danger")
+    flags = {}
+    try:
+        flags = get_all_flags()
+    except Exception:
+        pass
+    return render_template("login.html", flags=flags, cart_count=0)
 
 
 @app.route("/logout")
