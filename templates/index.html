@@ -3,32 +3,30 @@
 
 {% block content %}
 
-<!-- Hero -->
 <div class="rounded-4 p-5 mb-5 position-relative overflow-hidden"
      style="background:linear-gradient(135deg,#1e1b4b 0%,#4f46e5 50%,#7c3aed 100%);">
   <div class="position-relative" style="z-index:1;">
-    <p class="mb-1" style="color:#a5b4fc; font-size:0.85rem; letter-spacing:1.5px; text-transform:uppercase; font-weight:600;">
+    <p class="mb-1" style="color:#e0e7ff; font-size:0.85rem; letter-spacing:1.5px; text-transform:uppercase; font-weight:700;">
       Welcome to ShopSmart
     </p>
     <h1 class="fw-800 mb-2" style="color:#ffffff; font-size:2.8rem; letter-spacing:-1px; font-weight:800;">
       Discover Amazing<br>Products
     </h1>
-    <p class="mb-4" style="color:#c7d2fe; font-size:1.05rem;">
+    <p class="mb-4" style="color:#f1f5f9; font-size:1.05rem;">
       {{ products|length }} curated items — real-time feature flags in action
     </p>
     <a href="#products" class="btn btn-warning btn-lg rounded-pill px-5 fw-bold shadow">
       <i class="bi bi-grid me-2"></i>Shop Now
     </a>
   </div>
-  <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:rgba(255,255,255,0.05);border-radius:50%;"></div>
-  <div style="position:absolute;bottom:-60px;right:100px;width:300px;height:300px;background:rgba(255,255,255,0.03);border-radius:50%;"></div>
+  <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:rgba(255,255,255,0.08);border-radius:50%;"></div>
+  <div style="position:absolute;bottom:-60px;right:100px;width:300px;height:300px;background:rgba(255,255,255,0.05);border-radius:50%;"></div>
 </div>
 
-<!-- Header -->
 <div id="products" class="d-flex justify-content-between align-items-center mb-4">
   <div>
     <h2 class="section-title mb-0">Featured Products</h2>
-    <small class="text-muted">
+    <small class="text-secondary">
       <i class="bi bi-grid-3x3-gap me-1"></i>{{ products|length }} items available
     </small>
   </div>
@@ -40,14 +38,12 @@
   </a>
 </div>
 
-<!-- Product Grid -->
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   {% for p in products %}
   <div class="col">
-    <div class="card product-card h-100">
+    <div class="card product-card h-100 shadow-sm">
 
-      <!-- Image area -->
-      <div class="product-img">
+      <div class="product-img py-4 d-flex align-items-center justify-content-center position-relative" style="background: rgba(0,0,0,0.03); min-height: 180px;">
         <span style="filter:drop-shadow(0 8px 16px rgba(0,0,0,0.2)); position:relative; z-index:1; font-size:6rem;">
           {% if p['category'] == 'Electronics' %}🎧
           {% elif p['category'] == 'Footwear' %}👟
@@ -56,43 +52,39 @@
         </span>
         {% if flags.get('discount-banner-enabled') %}
         <span class="position-absolute top-0 end-0 m-3 badge rounded-pill shadow"
-              style="background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-size:0.8rem;padding:6px 12px;z-index:2;">
+              style="background:linear-gradient(135deg,#ef4444,#dc2626);color:#ffffff;font-size:0.8rem;padding:6px 12px;z-index:2;">
           -{{ flags['discount-percentage'] }}% OFF
         </span>
         {% endif %}
         {% if flags.get('stock-alert-enabled') %}
         <span class="position-absolute top-0 start-0 m-3 badge rounded-pill"
-              style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:0.72rem;padding:5px 10px;z-index:2;">
+              style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#ffffff;font-size:0.72rem;padding:5px 10px;z-index:2;">
           <i class="bi bi-lightning-fill"></i> Low Stock
         </span>
         {% endif %}
       </div>
 
-      <!-- Card body — all text uses explicit colors for dark mode compatibility -->
       <div class="card-body d-flex flex-column p-4">
 
-        <!-- Category + Ratings -->
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="badge category-badge"
-                style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff !important;">
+          <span class="badge"
+                style="background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#ffffff !important;">
             {{ p['category'] }}
           </span>
           {% if flags.get('ratings-enabled') %}
-          <span style="font-size:0.82rem; color:#f59e0b; font-weight:600;">
+          <span style="font-size:0.82rem; color:#fbbf24; font-weight:600;">
             ★★★★☆
-            <span style="color:#94a3b8; font-weight:400;">(128)</span>
+            <span class="text-secondary fw-normal">(128)</span>
           </span>
           {% endif %}
         </div>
 
-        <!-- Product name — always white/dark depending on mode -->
-        <h5 class="fw-bold mb-1" style="font-size:1.05rem;">
+        <h5 class="fw-bold mb-1" style="font-size:1.1rem; color: var(--bs-heading-color, inherit);">
           {{ p['name'] }}
         </h5>
 
-        <!-- Price -->
         <div class="d-flex align-items-baseline gap-2 mb-3">
-          <span class="fw-bold" style="font-size:1.5rem; color:#10b981;">
+          <span class="fw-bold" style="font-size:1.5rem; color:#34d399;">
             Rs.{{ "%.2f"|format(p['price']) }}
           </span>
           {% if flags.get('discount-banner-enabled') %}
@@ -102,32 +94,29 @@
           {% endif %}
         </div>
 
-        <!-- Feature badges -->
         <div class="d-flex flex-wrap gap-2 mb-3">
           {% if flags.get('free-shipping-enabled') %}
           <span class="badge rounded-pill px-3 py-2"
-                style="background:#dcfce7; color:#166534; font-size:0.75rem; font-weight:600;">
+                style="background:rgba(16, 185, 129, 0.15); color:#10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size:0.75rem; font-weight:600;">
             <i class="bi bi-truck me-1"></i>Free Shipping
           </span>
           {% endif %}
           {% if flags.get('buy-now-enabled') %}
           <span class="badge rounded-pill px-3 py-2"
-                style="background:#fef9c3; color:#854d0e; font-size:0.75rem; font-weight:600;">
+                style="background:rgba(245, 158, 11, 0.15); color:#f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size:0.75rem; font-weight:600;">
             <i class="bi bi-lightning-fill me-1"></i>Instant Buy
           </span>
           {% endif %}
         </div>
 
-        <!-- Coupon hint -->
         {% if flags.get('coupon-box-enabled') %}
         <div class="rounded-3 p-2 mb-3 text-center"
-             style="background:#eef2ff; border:1.5px dashed #818cf8; font-size:0.8rem;">
-          <i class="bi bi-ticket-perforated-fill me-1" style="color:#6366f1;"></i>
-          <span style="color:#3730a3;">Use <strong>SAVE10</strong> for extra discount</span>
+             style="background:rgba(99, 102, 241, 0.1); border:1.5px dashed #6366f1; font-size:0.8rem;">
+          <i class="bi bi-ticket-perforated-fill me-1" style="color:#818cf8;"></i>
+          <span style="color:#a5b4fc;">Use <strong class="text-white">SAVE10</strong> for extra discount</span>
         </div>
         {% endif %}
 
-        <!-- Buttons -->
         <div class="mt-auto d-grid gap-2">
           <a href="{{ url_for('add_to_cart', product_id=p['id']) }}"
              class="btn btn-primary rounded-pill py-2 fw-bold">
@@ -136,7 +125,7 @@
           {% if flags.get('buy-now-enabled') %}
           <a href="{{ url_for('checkout') }}"
              class="btn btn-warning rounded-pill py-2 fw-bold"
-             style="color:#1e1b4b;">
+             style="color:#1e1b4b !important;">
             <i class="bi bi-lightning-fill me-1"></i>Buy Now
           </a>
           {% endif %}
@@ -148,30 +137,29 @@
   {% endfor %}
 </div>
 
-<!-- Live Flag Status Panel -->
-<div class="mt-5 rounded-4 p-4"
-     style="background:linear-gradient(135deg,#1e1b4b,#312e81);">
+<div class="mt-5 rounded-4 p-4 shadow-lg"
+     style="background:linear-gradient(135deg,#1e1b4b,#312e81); border: 1px solid rgba(255,255,255,0.1);">
   <div class="d-flex align-items-center gap-3 mb-3">
-    <span class="rounded-2 p-2" style="background:rgba(255,255,255,0.1);">
-      <i class="bi bi-toggles" style="color:#a5b4fc; font-size:1.2rem;"></i>
+    <span class="rounded-2 p-2" style="background:rgba(255,255,255,0.15);">
+      <i class="bi bi-toggles" style="color:#c7d2fe; font-size:1.2rem;"></i>
     </span>
     <div>
       <h5 class="mb-0 fw-bold" style="color:#ffffff !important;">
         Live Feature Flag Status
       </h5>
-      <small style="color:#a5b4fc !important;">
+      <small style="color:#cbd5e1 !important;">
         Real-time from GO Feature Flag Relay Proxy
-        (<code style="color:#fbbf24; background:transparent;">flags/flags.yaml</code> tracked by Git)
+        (<code style="color:#fbbf24; background:transparent; padding:0;">flags/flags.yaml</code>)
       </small>
     </div>
   </div>
   <div class="d-flex flex-wrap gap-2">
     {% for key, val in flags.items() %}
-    <span class="badge flag-pill"
-          style="{% if val == true %}background:#059669;color:#ffffff;
-                 {% elif val == false %}background:rgba(255,255,255,0.1);color:#a5b4fc;
-                 {% else %}background:#d97706;color:#ffffff;{% endif %}">
-      {{ key }}: <strong>{{ val }}</strong>
+    <span class="badge border"
+          style="{% if val == true %}background:#059669; color:#ffffff; border-color:#059669 !important;
+                 {% elif val == false %}background:rgba(255,255,255,0.05); color:#94a3b8; border-color:rgba(255,255,255,0.1) !important;
+                 {% else %}background:#d97706; color:#ffffff; border-color:#d97706 !important;{% endif %} padding: 8px 12px; border-radius: 8px;">
+      {{ key }}: <strong style="color: #fff;">{{ val }}</strong>
     </span>
     {% endfor %}
   </div>
