@@ -81,7 +81,8 @@ dark-mode-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: enabled  # change to enabled to switch site to dark theme
+    variation: disabled
+     # change to enabled to switch site to dark theme
 
 # ── 10. Buy Now Button ────────────────────────────────────────────────────────
 buy-now-enabled:
