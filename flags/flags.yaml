@@ -73,4 +73,4 @@ new-checkout-layout:
     new:     true
     classic: false
   defaultRule:
-    variation: classic     # Change to "new" to activate two-column layout
+    variation: new     # Change to "new" to activate two-column layout
