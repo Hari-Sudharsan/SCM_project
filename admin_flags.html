@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% block title %}Flag Dashboard{% endblock %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-1"><i class="bi bi-toggles"></i> Feature Flag Dashboard</h2>
+<p class="text-muted mb-4">
+  Live values read from GO Feature Flag Relay Proxy (sourced from <code>flags/flags.yaml</code> — tracked in Git).
+  This page demonstrates <strong>SCM Configuration Status Accounting</strong>.
+</p>
+
+<div class="row g-4">
+  {% set flag_info = {
+    'discount-banner-enabled': {
+      'icon': 'bi-tag-fill',
+      'color': 'warning',
+      'desc': 'Shows a discount banner on homepage and product cards with the configured percentage off.',
+      'type': 'boolean'
+    },
+    'cash-on-delivery-enabled': {
+      'icon': 'bi-cash-coin',
+      'color': 'success',
+      'desc': 'Enables Cash on Delivery as a payment option during checkout.',
+      'type': 'boolean'
+    },
+    'promo-banner-enabled': {
+      'icon': 'bi-megaphone-fill',
+      'color': 'primary',
+      'desc': 'Displays a promotional banner strip at the top of every page.',
+      'type': 'boolean'
+    },
+    'new-checkout-layout': {
+      'icon': 'bi-layout-sidebar-reverse',
+      'color': 'info',
+      'desc': 'Switches the checkout page from single-column to two-column layout.',
+      'type': 'boolean'
+    },
+    'discount-percentage': {
+      'icon': 'bi-percent',
+      'color': 'danger',
+      'desc': 'The numeric discount % shown in the discount banner and applied to cart total.',
+      'type': 'string'
+    },
+    'promo-banner-text': {
+      'icon': 'bi-chat-quote-fill',
+      'color': 'secondary',
+      'desc': 'The text message shown inside the promotional banner strip.',
+      'type': 'string'
+    }
+  } %}
+
+  {% for key, val in flags.items() %}
+  {% set info = flag_info.get(key, {'icon':'bi-flag','color':'dark','desc':'','type':'string'}) %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <div class="d-flex align-items-start justify-content-between">
+          <div>
+            <span class="badge bg-{{ info['color'] }} mb-2">
+              <i class="bi {{ info['icon'] }}"></i>
+              {{ info['type'] }}
+            </span>
+            <h5 class="card-title mb-1">{{ key }}</h5>
+            <p class="text-muted small">{{ info['desc'] }}</p>
+          </div>
+        </div>
+        <div class="mt-2 p-2 rounded"
+             style="background:{% if val == true %}#d1fae5{% elif val == false %}#f3f4f6{% else %}#dbeafe{% endif %}">
+          <span class="fw-bold fs-5">
+            {% if val == true %}
+              <i class="bi bi-check-circle-fill text-success"></i> true
+            {% elif val == false %}
+              <i class="bi bi-x-circle-fill text-secondary"></i> false
+            {% else %}
+              <i class="bi bi-type text-primary"></i> "{{ val }}"
+            {% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- SCM Info -->
+<div class="card mt-5 border-0 shadow-sm bg-light">
+  <div class="card-body">
+    <h5><i class="bi bi-git text-dark"></i> SCM Configuration Identification</h5>
+    <p class="text-muted mb-2 small">
+      All flags are defined in <code>flags/flags.yaml</code> which is version-controlled by Git.
+      Run the commands below to see the full audit trail.
+    </p>
+    <pre class="bg-dark text-success rounded p-3 small mb-0">
+# View commit history of the flags file
+git log --oneline flags/flags.yaml
+
+# See what changed between any two commits
+git diff HEAD~1 HEAD -- flags/flags.yaml
+
+# Check current state of flags
+git show HEAD:flags/flags.yaml
+    </pre>
+  </div>
+</div>
+
+{% endblock %}

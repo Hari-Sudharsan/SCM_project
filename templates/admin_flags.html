@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}Flag Dashboard{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-1"><i class="bi bi-toggles"></i> Feature Flag Dashboard</h2>
+<p class="text-muted mb-4">Live values from GO Feature Flag Relay Proxy. Demonstrates <strong>SCM Configuration Status Accounting</strong>.</p>
+<div class="row g-4">
+  {% for key, val in flags.items() %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <h6 class="card-title text-monospace fw-bold">{{ key }}</h6>
+        <div class="mt-2 p-3 rounded text-center"
+             style="background:{% if val == true %}#d1fae5{% elif val == false %}#f3f4f6{% else %}#dbeafe{% endif %}">
+          <span class="fw-bold fs-4">
+            {% if val == true %}<i class="bi bi-check-circle-fill text-success"></i> true
+            {% elif val == false %}<i class="bi bi-x-circle-fill text-secondary"></i> false
+            {% else %}<i class="bi bi-type text-primary"></i> "{{ val }}"{% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<div class="card mt-5 border-0 shadow-sm bg-light">
+  <div class="card-body">
+    <h5><i class="bi bi-terminal"></i> SCM Git Commands</h5>
+    <pre class="bg-dark text-success rounded p-3 small mb-0">
+# View commit history of flags
+git log --oneline flags/flags.yaml
+
+# See what changed
+git diff HEAD~1 HEAD -- flags/flags.yaml
+
+# Full audit trail
+git log --format="%H %ai %an: %s" -- flags/flags.yaml</pre>
+  </div>
+</div>
+{% endblock %}

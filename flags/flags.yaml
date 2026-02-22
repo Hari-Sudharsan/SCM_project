@@ -1,0 +1,43 @@
+discount-banner-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled
+
+discount-percentage:
+  variations:
+    ten: "10"
+    twenty: "20"
+    thirty: "30"
+  defaultRule:
+    variation: ten
+
+cash-on-delivery-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled
+
+promo-banner-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled
+
+promo-banner-text:
+  variations:
+    sale:    "🔥 Grand Sale! Up to 50% off on all products. Shop Now!"
+    festive: "🎊 Festive Offers: Free Shipping on orders above Rs.999!"
+    default: "Welcome to ShopSmart — India's favourite online store!"
+  defaultRule:
+    variation: default
+
+new-checkout-layout:
+  variations:
+    new:     true
+    classic: false
+  defaultRule:
+    variation: classic

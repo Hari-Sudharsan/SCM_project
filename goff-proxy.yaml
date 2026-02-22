@@ -1,0 +1,5 @@
+listen: 1031
+retrievers:
+  - kind: file
+    path: /Users/amma/Downloads/E-commerce/flags/flags.yaml
+pollingInterval: 5000

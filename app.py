@@ -1,0 +1,212 @@
+"""
+Real-Time Feature Management in E-commerce Application
+Using SCM Tools (Git + GO Feature Flag)
+"""
+
+import sqlite3
+import json
+import os
+import requests
+from flask import Flask, render_template, redirect, url_for, session, request, flash
+
+# ---------------------------------------------------------------------------
+# CRITICAL PATH FIX
+# BASE_DIR = the folder containing THIS app.py file.
+# All paths are resolved relative to it, so `python app.py` works from anywhere.
+# ---------------------------------------------------------------------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
+STATIC_DIR   = os.path.join(BASE_DIR, "static")
+DB_PATH      = os.path.join(BASE_DIR, "instance", "shop.db")
+
+# Startup diagnostic — confirms Flask will find templates
+print("=" * 60)
+print(f"  BASE_DIR    : {BASE_DIR}")
+print(f"  TEMPLATE_DIR: {TEMPLATE_DIR}")
+print(f"  templates exist: {os.path.isdir(TEMPLATE_DIR)}")
+if os.path.isdir(TEMPLATE_DIR):
+    print(f"  files found : {os.listdir(TEMPLATE_DIR)}")
+print("=" * 60)
+
+app = Flask(
+    __name__,
+    template_folder=TEMPLATE_DIR,
+    static_folder=STATIC_DIR,
+)
+app.secret_key = "ecommerce-scm-demo-secret-2024"
+
+RELAY_PROXY_URL = "http://localhost:1031"
+
+
+def get_db():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_db():
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS products (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL, price REAL NOT NULL,
+            image TEXT NOT NULL, category TEXT NOT NULL
+        )
+    """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            items TEXT NOT NULL, total REAL NOT NULL,
+            payment TEXT NOT NULL, created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    cur.execute("SELECT COUNT(*) FROM products")
+    if cur.fetchone()[0] == 0:
+        cur.executemany(
+            "INSERT INTO products (name, price, image, category) VALUES (?, ?, ?, ?)",
+            [
+                ("Wireless Headphones", 2999.00, "headphones", "Electronics"),
+                ("Running Shoes",       1499.00, "shoes",       "Footwear"),
+                ("Cotton T-Shirt",       499.00, "tshirt",      "Clothing"),
+                ("Smart Watch",         3999.00, "watch",       "Electronics"),
+                ("Backpack",             899.00, "bag",         "Accessories"),
+                ("Sunglasses",           749.00, "glasses",     "Accessories"),
+            ]
+        )
+    conn.commit()
+    conn.close()
+
+
+def evaluate_flag(flag_key, default_value, user_id="anonymous"):
+    try:
+        resp = requests.post(
+            f"{RELAY_PROXY_URL}/ofrep/v1/evaluate/flags/{flag_key}",
+            json={"context": {"targetingKey": user_id}},
+            timeout=2
+        )
+        if resp.status_code == 200:
+            return resp.json().get("value", default_value)
+    except Exception:
+        pass
+    return default_value
+
+
+def get_all_flags(user_id="anonymous"):
+    return {
+        "discount-banner-enabled":  evaluate_flag("discount-banner-enabled",  False,               user_id),
+        "cash-on-delivery-enabled": evaluate_flag("cash-on-delivery-enabled", False,               user_id),
+        "promo-banner-enabled":     evaluate_flag("promo-banner-enabled",     False,               user_id),
+        "new-checkout-layout":      evaluate_flag("new-checkout-layout",      False,               user_id),
+        "discount-percentage":      evaluate_flag("discount-percentage",      "10",                user_id),
+        "promo-banner-text":        evaluate_flag("promo-banner-text",        "Grand Sale! Shop Now!", user_id),
+    }
+
+
+def get_cart():
+    return session.get("cart", {})
+
+
+def cart_total(cart):
+    conn = get_db()
+    total = 0.0
+    for pid, qty in cart.items():
+        row = conn.execute("SELECT price FROM products WHERE id=?", (int(pid),)).fetchone()
+        if row:
+            total += row["price"] * qty
+    conn.close()
+    return total
+
+
+@app.route("/")
+def index():
+    conn = get_db()
+    products = conn.execute("SELECT * FROM products").fetchall()
+    conn.close()
+    flags = get_all_flags()
+    cart = get_cart()
+    return render_template("index.html", products=products, flags=flags, cart_count=sum(cart.values()))
+
+
+@app.route("/add-to-cart/<int:product_id>")
+def add_to_cart(product_id):
+    cart = get_cart()
+    key = str(product_id)
+    cart[key] = cart.get(key, 0) + 1
+    session["cart"] = cart
+    flash("Item added to cart!", "success")
+    return redirect(url_for("index"))
+
+
+@app.route("/cart")
+def cart():
+    conn = get_db()
+    cart = get_cart()
+    items = []
+    for pid, qty in cart.items():
+        row = conn.execute("SELECT * FROM products WHERE id=?", (int(pid),)).fetchone()
+        if row:
+            items.append({"id": row["id"], "name": row["name"], "price": row["price"],
+                          "qty": qty, "subtotal": row["price"] * qty})
+    conn.close()
+    total = cart_total(cart)
+    flags = get_all_flags()
+    discount = round(total * float(flags["discount-percentage"]) / 100, 2) if flags["discount-banner-enabled"] else 0.0
+    return render_template("cart.html", items=items, total=total, discount=discount,
+                           flags=flags, cart_count=sum(cart.values()))
+
+
+@app.route("/checkout", methods=["GET", "POST"])
+def checkout():
+    flags = get_all_flags()
+    cart  = get_cart()
+    total = cart_total(cart)
+    discount = round(total * float(flags["discount-percentage"]) / 100, 2) if flags["discount-banner-enabled"] else 0.0
+    final_total = round(total - discount, 2)
+    if request.method == "POST":
+        payment = request.form.get("payment_method", "card")
+        if payment == "cod" and not flags["cash-on-delivery-enabled"]:
+            flash("Cash on Delivery is currently unavailable.", "danger")
+            return redirect(url_for("checkout"))
+        conn = get_db()
+        conn.execute("INSERT INTO orders (items, total, payment) VALUES (?, ?, ?)",
+                     (json.dumps(dict(cart)), final_total, payment))
+        conn.commit()
+        conn.close()
+        session.pop("cart", None)
+        flash(f"Order placed! Payment: {payment.upper()}. Total Rs.{final_total:.2f}", "success")
+        return redirect(url_for("order_success"))
+    return render_template("checkout.html", flags=flags, total=total,
+                           discount=discount, final_total=final_total, cart_count=sum(cart.values()))
+
+
+@app.route("/order-success")
+def order_success():
+    return render_template("order_success.html", flags=get_all_flags(), cart_count=0)
+
+
+@app.route("/clear-cart")
+def clear_cart():
+    session.pop("cart", None)
+    flash("Cart cleared.", "info")
+    return redirect(url_for("index"))
+
+
+@app.route("/admin/flags")
+def admin_flags():
+    return render_template("admin_flags.html", flags=get_all_flags(), cart_count=0)
+
+
+@app.route("/admin/orders")
+def admin_orders():
+    conn = get_db()
+    orders = conn.execute("SELECT * FROM orders ORDER BY id DESC").fetchall()
+    conn.close()
+    return render_template("admin_orders.html", orders=orders, flags=get_all_flags(), cart_count=0)
+
+
+if __name__ == "__main__":
+    init_db()
+    app.run(debug=True, port=5000)
