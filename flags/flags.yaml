@@ -1,43 +1,116 @@
+# =============================================================================
+# flags.yaml — Feature Flag Configuration
+# =============================================================================
+# Tracked by Git (SCM). Every change here is a commit providing:
+#   - Version Control
+#   - Configuration Identification (commit SHA)
+#   - Configuration Status Accounting
+#   - Audit Trail (git log)
+#   - Controlled Rollout
+# =============================================================================
+
+# ── 1. Discount Banner ────────────────────────────────────────────────────────
 discount-banner-enabled:
   variations:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled
+    variation: disabled   # change to enabled to show discount banner
 
+# ── 2. Discount Percentage ────────────────────────────────────────────────────
 discount-percentage:
   variations:
     ten: "10"
     twenty: "20"
     thirty: "30"
   defaultRule:
-    variation: ten
+    variation: ten        # change to twenty or thirty to adjust
 
+# ── 3. Cash on Delivery ───────────────────────────────────────────────────────
 cash-on-delivery-enabled:
   variations:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled
+    variation: disabled   # change to enabled to allow COD
 
+# ── 4. Promotional Banner ─────────────────────────────────────────────────────
 promo-banner-enabled:
   variations:
     enabled: true
     disabled: false
   defaultRule:
-    variation: disabled
+    variation: disabled   # change to enabled to show promo strip
 
+# ── 5. Promotional Banner Text ────────────────────────────────────────────────
 promo-banner-text:
   variations:
     sale:    "🔥 Grand Sale! Up to 50% off on all products. Shop Now!"
     festive: "🎊 Festive Offers: Free Shipping on orders above Rs.999!"
     default: "Welcome to ShopSmart — India's favourite online store!"
   defaultRule:
-    variation: default
+    variation: default    # change to sale or festive for campaigns
 
+# ── 6. New Checkout Layout ────────────────────────────────────────────────────
 new-checkout-layout:
   variations:
     new:     true
     classic: false
   defaultRule:
-    variation: classic
+    variation: classic    # change to new to activate two-column layout
+
+# ── 7. Free Shipping ──────────────────────────────────────────────────────────
+free-shipping-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled   # change to enabled to show free shipping badge
+
+# ── 8. Stock Alert ────────────────────────────────────────────────────────────
+stock-alert-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled   # change to enabled to show low stock warning
+
+# ── 9. Dark Mode ──────────────────────────────────────────────────────────────
+dark-mode-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled   # change to enabled to switch site to dark theme
+
+# ── 10. Buy Now Button ────────────────────────────────────────────────────────
+buy-now-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled   # change to enabled to show Buy Now button on cards
+
+# ── 11. Star Ratings ──────────────────────────────────────────────────────────
+ratings-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled   # change to enabled to show star ratings on cards
+
+# ── 12. Coupon Code Box ───────────────────────────────────────────────────────
+coupon-box-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled   # change to enabled to show coupon input on cart page
+
+# ── 13. Flash Sale Mode ───────────────────────────────────────────────────────
+flash-sale-enabled:
+  variations:
+    enabled: true
+    disabled: false
+  defaultRule:
+    variation: disabled   # change to enabled to activate full flash sale mode
