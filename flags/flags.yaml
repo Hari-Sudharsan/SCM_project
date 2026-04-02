@@ -15,7 +15,7 @@ discount-banner-enabled:
     enabled: true
     disabled: false
   defaultRule:
-    variation: enabled  # change to enabled to show discount banner
+    variation: disabled # change to enabled to show discount banner
 
 # ── 2. Discount Percentage ────────────────────────────────────────────────────
 discount-percentage:
